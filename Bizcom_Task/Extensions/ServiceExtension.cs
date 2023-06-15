@@ -13,6 +13,7 @@ namespace Bizcom_Task.Extensions
             services.AddScoped<ITeacherRepository, TeacherRepository>();
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IGradeRepository, GradeRepository>();
         }
 
         public static void ConfigurationServices(this IServiceCollection services)
@@ -21,6 +22,7 @@ namespace Bizcom_Task.Extensions
             services.AddScoped<ISubjectService, SubjectService>();
             services.AddScoped<ITeacherService, TeacherService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGradeService, GradeService>();
             services.AddScoped<IStatisticsService, StatisticsService>();
         }
 

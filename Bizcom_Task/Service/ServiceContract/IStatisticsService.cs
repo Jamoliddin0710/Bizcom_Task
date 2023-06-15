@@ -12,6 +12,8 @@ namespace Bizcom_Task.Service.ServiceContract
         Task<Tuple<List<StudentDTO>, List<TeacherDTO>>> GetBeelinUser();
         Task<List<StudentDTO>> GetStudentByName(string name);
         Task<SubjectDTO> GetSubjectStudentBall(int studentId);
-        Task<SubjectDTO> GetStudentMaxScore10(int teacherId);
+        Task<List<SubjectDTO>> GetStudentMaxScore10(int teacherId);
+        Task<List<TeacherDTO>> GetTeacherByMaxScoreFrom97();
+        Task<SubjectDTO> GetSubjectByStudentMaxBall(int studentId);
     }
 }

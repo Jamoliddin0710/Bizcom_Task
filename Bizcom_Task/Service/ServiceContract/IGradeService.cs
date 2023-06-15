@@ -5,8 +5,8 @@ namespace Bizcom_Task.Service.ServiceContract
 {
     public interface IGradeService
     {
-        Task AddGrade(AddGradeDTO addGrade);
-        Task UpdateGrade();
+        Task AddGrade(int teacherId, AddGradeDTO addGrade);
         Task<GradeDTo> GetGradeById(int studentId);
+        Task<List<GradeDTo>> GetAllGrades();
     }
 }

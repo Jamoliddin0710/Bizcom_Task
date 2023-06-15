@@ -1,6 +1,7 @@
 ﻿using Bizcom_Task.Entities.Model;
 using Bizcom_Task.Entities.ModelView;
 using Bizcom_Task.Exceptions;
+using Entities.Exceptions;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.Serialization;
@@ -72,6 +73,55 @@ namespace Bizcom_Task.Service.ServiceContract
 
         }
 
+
+        public async Task<List<SubjectDTO>> GetStudentMaxScore10(int teacherId)
+        {
+            try
+            {
+                var teacher = await context.Teachers.FirstOrDefaultAsync(teacher => teacher.Id == teacherId);
+                if (teacher is null)
+                    throw new EntityNotFoundException<Teacher>();
+
+                var grades = teacher.Grades.Where(gr => gr.Score > 80).Take(10).ToList();
+                var subjectIds = grades.Select(gr => gr.subjectId).ToList();
+                var CurrentSubjects = context.Subjects.Where(sub => subjectIds.Contains(sub.Id)).ToList();
+                return CurrentSubjects.Adapt<List<SubjectDTO>>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<TeacherDTO>> GetTeacherByMaxScoreFrom97()
+        {
+            var grades = context.Grades.Where(st => st.Score > 97);
+            if (grades.Any())
+                return new List<TeacherDTO>();
+
+            var teacherIds = grades.Select(gr => gr.teacherId).ToList();
+            var teachers = await context.Teachers.Where(teacher => teacherIds.Contains(teacher.Id)).ToListAsync();
+            if (teachers.Any())
+                return new List<TeacherDTO>();
+
+            return teachers.Adapt<List<TeacherDTO>>();
+        }
+
+
+        public async Task<SubjectDTO> GetSubjectStudentBall(int studentId)
+        {
+            try
+            {
+                var maxScoreSubjectId = MaxScoreSubjectId(context.Grades.Where(gr => gr.studentId == studentId).ToList());
+                var subject = await context.Subjects.FirstOrDefaultAsync(sub => sub.Id == maxScoreSubjectId);
+                return subject.Adapt<SubjectDTO>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         private bool AgeComparewith20(DateTime DateOfBirth)
         {
             int age = DateTime.Now.Year - DateOfBirth.Year;
@@ -109,20 +159,6 @@ namespace Bizcom_Task.Service.ServiceContract
             return false;
         }
 
-        public async Task<SubjectDTO> GetSubjectStudentBall(int studentId)
-        {
-            try
-            {
-                var maxScoreSubjectId = MaxScoreSubjectId(context.Grades.Where(gr => gr.studentId == studentId).ToList());
-                var subject = await context.Subjects.FirstOrDefaultAsync(sub => sub.Id == maxScoreSubjectId);
-                return subject.Adapt<SubjectDTO>();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         private int MaxScoreSubjectId(List<Grade> grades)
         {
             Decimal maxScore = Decimal.MinValue;
@@ -138,15 +174,23 @@ namespace Bizcom_Task.Service.ServiceContract
             return maxScoreSubjectId;
         }
 
-        public Task<SubjectDTO> GetStudentMaxScore10(int teacherId)
+        public async Task<SubjectDTO> GetSubjectByStudentMaxBall(int studentId)
         {
-            throw new NotImplementedException();
+            var student = await context.Students.FirstOrDefaultAsync(st => st.Id == studentId);
+            if (student is null)
+                throw new EntityNotFoundException<Student>();
+
+            var maxScore = student.Grades.Max(g => g.Score);
+
+            int? maxScoresubjectId = student.Grades.First(gr => gr.Score == maxScore).subjectId;
+
+            if (maxScoresubjectId is null)
+                throw new Exception("max Score is not found");
+
+            var subject = context.Subjects.Find(maxScoresubjectId);
+            if (subject is null)
+                throw new Exception($"{maxScoresubjectId} is not found");
+            return subject.Adapt<SubjectDTO>();
         }
-
-        /*public Task<SubjectDTO> GetStudentMaxScore10(int teacherId)
-        {
-            var teacher = context.Teachers.Find(teacherId);
-
-        }*/
     }
 }
