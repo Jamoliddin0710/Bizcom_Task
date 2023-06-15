@@ -7,6 +7,6 @@ namespace Bizcom_Task.Entities.DTO.Grade
     {
         public int studentId { get; set; }
         public int subjectId { get; set; }
-        public EScore Score { get; set; }
+        public Decimal Score { get; set; }
     }
 }

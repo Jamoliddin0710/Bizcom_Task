@@ -11,14 +11,47 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bizcom_Task.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230614113937_newdb")]
-    partial class newdb
+    [Migration("20230615173403_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true);
+
+            modelBuilder.Entity("Bizcom_Task.Entities.Model.Grade", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Score")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("studentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("subjectId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("teacherId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("studentId");
+
+                    b.HasIndex("subjectId");
+
+                    b.HasIndex("teacherId");
+
+                    b.ToTable("Grades");
+                });
 
             modelBuilder.Entity("Bizcom_Task.Entities.Model.Student", b =>
                 {
@@ -121,6 +154,9 @@ namespace Bizcom_Task.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("teacherId");
 
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
@@ -201,6 +237,33 @@ namespace Bizcom_Task.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Bizcom_Task.Entities.Model.Grade", b =>
+                {
+                    b.HasOne("Bizcom_Task.Entities.Model.Student", "Student")
+                        .WithMany("Grades")
+                        .HasForeignKey("studentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bizcom_Task.Entities.Model.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("subjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bizcom_Task.Entities.Model.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("teacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
+                });
+
             modelBuilder.Entity("Bizcom_Task.Entities.Model.StudentSubject", b =>
                 {
                     b.HasOne("Bizcom_Task.Entities.Model.Student", "Student")
@@ -260,6 +323,8 @@ namespace Bizcom_Task.Migrations
 
             modelBuilder.Entity("Bizcom_Task.Entities.Model.Student", b =>
                 {
+                    b.Navigation("Grades");
+
                     b.Navigation("StudentSubjects");
 
                     b.Navigation("StudentTeachers");

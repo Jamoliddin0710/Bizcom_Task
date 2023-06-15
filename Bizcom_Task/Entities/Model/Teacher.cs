@@ -1,4 +1,5 @@
 ﻿using Bizcom_Task.Entities.Model.Enum;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bizcom_Task.Entities.Model
@@ -13,7 +14,9 @@ namespace Bizcom_Task.Entities.Model
         public string Phone { get; set; }
         public EUserRole Role { get; set; } = EUserRole.Teacher;
         public ETeacherStatus TeacherStatus { get; set; }
-        public ICollection<TeacherSubject>? TeacherSubjects { get; set; }
-        public ICollection<StudentTeacher>? StudentTeachers { get; }
+        public DateTime BirthDate { get; set; }
+        public virtual ICollection<TeacherSubject>? TeacherSubjects { get; set; }
+        public virtual ICollection<StudentTeacher>? StudentTeachers { get; set; }
+        public virtual ICollection<Grade>? Grades { get; set; }
     }
 }

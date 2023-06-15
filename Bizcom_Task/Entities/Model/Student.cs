@@ -15,8 +15,8 @@ namespace Bizcom_Task.Entities.Model
         public Guid StudentRegNumber { get; set; }
         public EUserRole Role { get; set; } = EUserRole.Student;
         public EStudentStatus StudentStatus { get; set; }
-        public ICollection<StudentSubject>? StudentSubjects { get; set; }
-        public ICollection<StudentTeacher>? StudentTeachers { get; set; }
-        public ICollection<Grade> Grades { get; set; }
+        public virtual ICollection<StudentSubject>? StudentSubjects { get; set; }
+        public virtual ICollection<StudentTeacher>? StudentTeachers { get; set; }
+        public virtual ICollection<Grade> Grades { get; set; }
     }
 }

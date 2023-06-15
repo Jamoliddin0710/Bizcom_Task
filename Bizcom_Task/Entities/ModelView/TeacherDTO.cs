@@ -10,7 +10,8 @@ namespace Bizcom_Task.Entities.ModelView
         public string? LastName { get; set; }
         public string? Email { get; set; }
         public string Phone { get; set; }
+        public DateTime? BirthDate { get; set; }
         public ETeacherStatus TeacherStatus { get; set; }
-        public List<SubjectTeacherDTO>? SubjectTeacherDTOs { get; set; }
+        // public List<SubjectTeacherDTO>? SubjectTeacherDTOs { get; set; }
     }
 }

@@ -5,7 +5,7 @@
 namespace Bizcom_Task.Migrations
 {
     /// <inheritdoc />
-    public partial class entityfixed : Migration
+    public partial class initdb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

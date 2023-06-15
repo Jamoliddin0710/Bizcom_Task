@@ -32,6 +32,7 @@ namespace Bizcom_Task.Service
             await subjectRepository.DeleteSubject(subject);
         }
 
+        //
         public async Task<List<SubjectDTO>> GetAllSubjects()
         {
             var subjects = await subjectRepository.GetAllSubjects();
@@ -51,7 +52,7 @@ namespace Bizcom_Task.Service
         public async Task UpdateSubject(int subjectId, UpdateSubjectDTO updateSubjectDTO)
         {
             var subject = await subjectRepository.GetSubjectById(subjectId);
-            
+
             if (subject is null)
                 throw new EntityNotFoundException<Subject>();
 

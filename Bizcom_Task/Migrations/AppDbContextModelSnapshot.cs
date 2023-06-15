@@ -15,7 +15,11 @@ namespace Bizcom_Task.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true);
 
             modelBuilder.Entity("Bizcom_Task.Entities.Model.Grade", b =>
                 {
@@ -23,8 +27,8 @@ namespace Bizcom_Task.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Score")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("studentId")
                         .HasColumnType("INTEGER");
@@ -147,6 +151,9 @@ namespace Bizcom_Task.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("teacherId");
 
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
@@ -242,7 +249,7 @@ namespace Bizcom_Task.Migrations
                         .IsRequired();
 
                     b.HasOne("Bizcom_Task.Entities.Model.Teacher", "Teacher")
-                        .WithMany()
+                        .WithMany("Grades")
                         .HasForeignKey("teacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -322,6 +329,8 @@ namespace Bizcom_Task.Migrations
 
             modelBuilder.Entity("Bizcom_Task.Entities.Model.Teacher", b =>
                 {
+                    b.Navigation("Grades");
+
                     b.Navigation("StudentTeachers");
 
                     b.Navigation("TeacherSubjects");

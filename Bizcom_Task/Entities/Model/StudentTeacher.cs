@@ -7,9 +7,9 @@ namespace Bizcom_Task.Entities.Model
         public int Id { get; set; }
         public int teacherId { get; set; }
         [ForeignKey(nameof(teacherId))]
-        public Teacher? Teacher { get; set; }
+        public virtual Teacher? Teacher { get; set; }
         public int studentId { get; set; }
         [ForeignKey(nameof(studentId))]
-        public Student? Student { get; set; }
+        public virtual Student? Student { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Bizcom_Task.Migrations
 {
     /// <inheritdoc />
-    public partial class newdb : Migration
+    public partial class fixeddb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,7 +55,8 @@ namespace Bizcom_Task.Migrations
                     Email = table.Column<string>(type: "TEXT", nullable: true),
                     Phone = table.Column<string>(type: "TEXT", nullable: false),
                     Role = table.Column<int>(type: "INTEGER", nullable: false),
-                    TeacherStatus = table.Column<int>(type: "INTEGER", nullable: false)
+                    TeacherStatus = table.Column<int>(type: "INTEGER", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -103,6 +104,40 @@ namespace Bizcom_Task.Migrations
                         column: x => x.subjectId,
                         principalTable: "Subjects",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Grades",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    studentId = table.Column<int>(type: "INTEGER", nullable: false),
+                    teacherId = table.Column<int>(type: "INTEGER", nullable: false),
+                    subjectId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Score = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Grades", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Grades_Students_studentId",
+                        column: x => x.studentId,
+                        principalTable: "Students",
+                        principalColumn: "studentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Grades_Subjects_subjectId",
+                        column: x => x.subjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Grades_Teachers_teacherId",
+                        column: x => x.teacherId,
+                        principalTable: "Teachers",
+                        principalColumn: "teacherId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -159,6 +194,21 @@ namespace Bizcom_Task.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Grades_studentId",
+                table: "Grades",
+                column: "studentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Grades_subjectId",
+                table: "Grades",
+                column: "subjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Grades_teacherId",
+                table: "Grades",
+                column: "teacherId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StudentSubjects_studentId",
                 table: "StudentSubjects",
                 column: "studentId");
@@ -192,6 +242,9 @@ namespace Bizcom_Task.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Grades");
+
             migrationBuilder.DropTable(
                 name: "StudentSubjects");
 

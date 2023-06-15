@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(
     options =>
     {
-        options.UseSqlite("Data Source = APPDB");
+        options.UseSqlite("Data Source = APPDB").UseLazyLoadingProxies();
     });
 
 builder.Services.ConfigurationRepository();
