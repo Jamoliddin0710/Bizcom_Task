@@ -96,12 +96,12 @@ namespace Bizcom_Task.Service.ServiceContract
         public async Task<List<TeacherDTO>> GetTeacherByMaxScoreFrom97()
         {
             var grades = context.Grades.Where(st => st.Score > 97);
-            if (grades.Any())
+            if (!grades.Any())
                 return new List<TeacherDTO>();
 
             var teacherIds = grades.Select(gr => gr.teacherId).ToList();
             var teachers = await context.Teachers.Where(teacher => teacherIds.Contains(teacher.Id)).ToListAsync();
-            if (teachers.Any())
+            if (!teachers.Any())
                 return new List<TeacherDTO>();
 
             return teachers.Adapt<List<TeacherDTO>>();
