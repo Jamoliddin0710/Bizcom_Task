@@ -47,7 +47,7 @@ namespace Bizcom_Task.Service.ServiceContract
             var students = await context.Students.ToListAsync();
             if (students is null)
                 throw new EntityNullException<Student>();
-            var currentStudents = students.Where(st => st.FirstName.Equals(name) && st.LastName.Equals(name));
+            var currentStudents = students.Where(st => st.FirstName.Equals(name) || st.LastName.Equals(name));
             if (currentStudents is null)
                 new List<StudentDTO>();
             return currentStudents.Adapt<List<StudentDTO>>();
