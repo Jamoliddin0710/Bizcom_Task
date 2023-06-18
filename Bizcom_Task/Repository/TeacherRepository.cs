@@ -13,15 +13,15 @@ namespace Bizcom_Task.Repository
             _appDbContext = appDbContext;
         }
 
-        public async Task CreateTeacher(Teacher teacher)
+        public async Task<Teacher>? SignInUser(string phone, string password)
         {
-            _appDbContext.Teachers.Add(teacher);
-            await _appDbContext.SaveChangesAsync();
+            var user = await _appDbContext.Teachers.Where(user => user.Phone.Equals(phone) && user.Password.Equals(password)).SingleOrDefaultAsync();
+            return user;
         }
 
-        public async Task DeleteTeacher(Teacher teacher)
+        public async Task SignUpUser(Teacher teacher)
         {
-            _appDbContext.Teachers.Remove(teacher);
+            await _appDbContext.Teachers.AddAsync(teacher);
             await _appDbContext.SaveChangesAsync();
         }
 
@@ -40,6 +40,12 @@ namespace Bizcom_Task.Repository
         public async Task UpdateTeacher(Teacher teacher)
         {
             _appDbContext.Teachers.Update(teacher);
+            await _appDbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteTeacher(Teacher teacher)
+        {
+            _appDbContext.Remove(teacher);
             await _appDbContext.SaveChangesAsync();
         }
     }

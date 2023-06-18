@@ -1,18 +1,16 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Bizcom_Task.Entities.DTO.User
+namespace Frontend.Entities.DTO.User
 {
-    public class CreateUserDTO
+    public class UpdateUserDTO
     {
-        [Required]
         public string? FirstName { get; set; }
+        [Required]
         public string? LastName { get; set; }
         [EmailAddress]
         public string? Email { get; set; }
         [Phone]
         public string? PhoneNumber { get; set; }
-        [Required]
         public string? Password { get; set; }
     }
 }

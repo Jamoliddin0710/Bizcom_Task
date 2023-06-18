@@ -2,6 +2,7 @@ using Bizcom_Task;
 using Bizcom_Task.Extensions;
 using Entities.DTO.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -23,6 +24,18 @@ builder.Services.AddDbContext<AppDbContext>(
 
 builder.Services.ConfigurationRepository();
 builder.Services.ConfigurationServices();
+
+builder.Services.AddCors(options =>
+options.AddPolicy("CorsPolicy", builder =>
+builder.AllowCredentials()
+    .AllowAnyHeader()
+    .WithOrigins(
+        "https://localhost:5000",
+        "https://localhost:5001",
+        "https://localhost:44398",
+        "https://localhost:44398"
+        , "https://localhost:44352")));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -89,6 +102,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

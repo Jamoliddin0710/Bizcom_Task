@@ -1,0 +1,66 @@
+﻿@page "/task6"
+@using Frontend.Entities.ModelView;
+@using Frontend.Service;
+@inject StatisticsService statisticsService;
+@code {
+    private List<StudentDTO> students = new List<StudentDTO>();
+    private SubjectDTO subject = new SubjectDTO();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            students = await statisticsService.GetAllStudent();
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+
+    private async Task GetSubjectByStudentId(int studentId)
+    {
+        try
+        {
+            subject = await statisticsService.GetSubjectByStudentBall(studentId);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}
+
+@if (!string.IsNullOrEmpty(subject.Name))
+{
+    <div style="float: left; padding: 10px; text-align: left">
+        <MudIcon Icon="@Icons.Material.Filled.MenuBook" Style="font-size: 14rem;"></MudIcon>
+        <MudText Style="text-align: center">@subject.Name</MudText>
+    </div>
+
+}
+else
+{
+    @if (students.Count > 0)
+    {
+        @for (int i = 0; i < students.Count; i += 4)
+        {
+            <div style="display :flex ; flex-wrap :wrap">
+
+                @for (int j = i; j < Math.Min(i + 4, students.Count); j++)
+                {
+                    var student = students[j];
+                    <div style="flex-basis: 25%; padding: 10px; text-align:center">
+
+                        <MudButton OnClick="()=> GetSubjectByStudentId(student.Id)">
+                            <MudIcon Icon="@Icons.Material.Filled.AccountCircle" Style="font-size: 14rem;"></MudIcon>
+                        </MudButton>
+                        <MudText>@student.FirstName  @student.LastName</MudText>
+                    </div>
+                }
+            </div>
+        }
+
+    }
+}

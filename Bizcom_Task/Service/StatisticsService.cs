@@ -47,7 +47,7 @@ namespace Bizcom_Task.Service.ServiceContract
             var students = await context.Students.ToListAsync();
             if (students is null)
                 throw new EntityNullException<Student>();
-            var currentStudents = students.Where(st => st.FirstName.Contains(name)  || st.LastName.Contains(name));
+            var currentStudents = students.Where(st => st.FirstName.Contains(name) || st.LastName.Contains(name));
             if (currentStudents is null)
                 new List<StudentDTO>();
             return currentStudents.Adapt<List<StudentDTO>>();
@@ -122,6 +122,39 @@ namespace Bizcom_Task.Service.ServiceContract
             }
         }
 
+        private int MaxScoreSubjectId(List<Grade> grades)
+        {
+            Decimal maxScore = Decimal.MinValue;
+            int maxScoreSubjectId = 1;
+            foreach (var grade in grades)
+            {
+                if (grade.Score > maxScore)
+                {
+                    maxScore = grade.Score;
+                    maxScoreSubjectId = grade.subjectId;
+                }
+            }
+            return maxScoreSubjectId;
+        }
+
+        public async Task<SubjectDTO> GetSubjectHighestAverageScore()
+        {
+            var subjects = await context.Subjects.ToListAsync();
+            var subjectWithMaxAverageGrade = subjects
+                .Select(subject => new
+                {
+                    Subject = subject,
+                    AverageGrade = subject.Grades != null && subject.Grades.Any()
+                        ? subject.Grades.Average(grade => (double)grade.Score)
+                        : 0
+                })
+                .OrderByDescending(item => item.AverageGrade)
+                .Select(item => item.Subject)
+                .FirstOrDefault();
+
+            return subjectWithMaxAverageGrade.Adapt<SubjectDTO>();
+        }
+
         private bool AgeComparewith20(DateTime DateOfBirth)
         {
             int age = DateTime.Now.Year - DateOfBirth.Year;
@@ -159,38 +192,6 @@ namespace Bizcom_Task.Service.ServiceContract
             return false;
         }
 
-        private int MaxScoreSubjectId(List<Grade> grades)
-        {
-            Decimal maxScore = Decimal.MinValue;
-            int maxScoreSubjectId = 1;
-            foreach (var grade in grades)
-            {
-                if (grade.Score > maxScore)
-                {
-                    maxScore = grade.Score;
-                    maxScoreSubjectId = grade.subjectId;
-                }
-            }
-            return maxScoreSubjectId;
-        }
 
-        public async Task<SubjectDTO> GetSubjectByStudentMaxBall(int studentId)
-        {
-            var student = await context.Students.FirstOrDefaultAsync(st => st.Id == studentId);
-            if (student is null)
-                throw new EntityNotFoundException<Student>();
-
-            var maxScore = student.Grades.Max(g => g.Score);
-
-            int? maxScoresubjectId = student.Grades.First(gr => gr.Score == maxScore).subjectId;
-
-            if (maxScoresubjectId is null)
-                throw new Exception("max Score is not found");
-
-            var subject = context.Subjects.Find(maxScoresubjectId);
-            if (subject is null)
-                throw new Exception($"{maxScoresubjectId} is not found");
-            return subject.Adapt<SubjectDTO>();
-        }
     }
 }

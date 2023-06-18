@@ -14,6 +14,6 @@ namespace Bizcom_Task.Service.ServiceContract
         Task<SubjectDTO> GetSubjectStudentBall(int studentId);
         Task<List<SubjectDTO>> GetStudentMaxScore10(int teacherId);
         Task<List<TeacherDTO>> GetTeacherByMaxScoreFrom97();
-        Task<SubjectDTO> GetSubjectByStudentMaxBall(int studentId);
+        Task<SubjectDTO> GetSubjectHighestAverageScore();
     }
 }

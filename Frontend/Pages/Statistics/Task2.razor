@@ -1,0 +1,49 @@
+﻿@page "/task2"
+@using Frontend.Entities.ModelView;
+@using Frontend.Service;
+@inject StatisticsService statisticsService;
+<h3>task1</h3>
+
+@code {
+    private List<StudentDTO> students = new List<StudentDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            students = await statisticsService.GetStudentFromAugustToSeptember();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}
+
+<MudTable Items="@students">
+    <HeaderContent>
+        <MudTh>#</MudTh>
+        <MudTh>FirstName</MudTh>
+        <MudTh>LastName</MudTh>
+        <MudTh>Email</MudTh>
+        <MudTh>Phone</MudTh>
+        <MudTh>Date</MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd>@context.Id</MudTd>
+        <MudTd>@context.FirstName</MudTd>
+        <MudTd>@context.LastName</MudTd>
+        <MudTd>@context.Email</MudTd>
+        <MudTd>@context.Phone</MudTd>
+        <MudTd>@context.DateOfBirth</MudTd>
+        <MudTd>
+            <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Edit" />
+        </MudTd>
+        <MudTd>
+            <MudFab Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete" />
+        </MudTd>
+    </RowTemplate>
+
+</MudTable>
+

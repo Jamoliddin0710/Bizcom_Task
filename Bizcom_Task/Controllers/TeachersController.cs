@@ -1,4 +1,5 @@
 ﻿using Bizcom_Task.Entities.DTO.Teacher;
+using Bizcom_Task.Entities.DTO.User;
 using Bizcom_Task.Entities.Model;
 using Bizcom_Task.Entities.ModelView;
 using Bizcom_Task.Filters;
@@ -19,11 +20,6 @@ namespace Bizcom_Task.Controllers
         {
             this.teacherService = teacherService;
         }
-
-        [ProducesResponseType(typeof(TeacherDTO), StatusCodes.Status200OK)]
-        [HttpPost(Name = "Create-Teacher")]
-        public async Task<ActionResult<TeacherDTO>> AddTeacher([FromBody] CreateTeacherDTO createTeacher)
-        => Ok(await teacherService.CreateTeacher(createTeacher));
 
         [ProducesResponseType(typeof(TeacherDTO), StatusCodes.Status200OK)]
         [HttpGet("{teacherId:int}", Name = "Get-Teacher")]

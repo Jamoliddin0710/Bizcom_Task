@@ -16,7 +16,6 @@ namespace Bizcom_Task
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Subject> Subjects { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Grade> Grades { get; set; }
         public DbSet<StudentSubject> StudentSubjects { get; set; }
         public DbSet<StudentTeacher> StudentTeachers { get; set; }

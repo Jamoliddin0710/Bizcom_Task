@@ -3,24 +3,40 @@ using Bizcom_Task.Entities.Model;
 using Bizcom_Task.Entities.ModelView;
 using Bizcom_Task.Repository.RepositoryContract;
 using Bizcom_Task.Service.ServiceContract;
+using Entities.Exceptions;
 using Mapster;
+using System.Security.Claims;
 
 namespace Bizcom_Task.Service
 {
     public class GradeService : IGradeService
     {
         private readonly IGradeRepository _gradeRepository;
-
-        public GradeService(IGradeRepository gradeRepository)
+        private readonly IStudentRepository studentRepository;
+        private readonly ISubjectRepository subjectRepository;
+        public GradeService(IGradeRepository gradeRepository, ISubjectRepository subjectRepository, IStudentRepository studentRepository = null)
         {
             _gradeRepository = gradeRepository;
+            this.subjectRepository = subjectRepository;
+            this.studentRepository = studentRepository;
         }
 
-        public async Task AddGrade(int teacherId, AddGradeDTO addGrade)
+        public async Task AddGrade(ClaimsPrincipal claims, AddGradeDTO addGrade)
         {
+            int? teacherId;
+            try
+            {
+                teacherId = int.Parse(claims.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
+            catch (Exception ex)
+            {
+                throw new NotRegisteredException<Teacher>();
+            }
             // Mapping AddGradeDTO to Grade entity
+            if (!_gradeRepository.IsThereStudentAndSubject(addGrade.studentId, addGrade.subjectId))
+                throw new EntityNotFoundException<StudentSubject>();
             var grade = addGrade.Adapt<Grade>();
-            grade.teacherId = teacherId;
+            grade.teacherId = teacherId.Value;
             // Add the grade using the repository
             await _gradeRepository.AddGrade(grade);
         }

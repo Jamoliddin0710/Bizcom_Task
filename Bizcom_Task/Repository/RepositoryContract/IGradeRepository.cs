@@ -9,5 +9,6 @@ namespace Bizcom_Task.Repository.RepositoryContract
         Task DeleteGrade(Grade grade);
         Task<Grade> GetGrade(int studentId);
         Task<List<Grade>> GetAllGrades();
+        bool IsThereStudentAndSubject(int studentId, int subjectId);
     }
 }

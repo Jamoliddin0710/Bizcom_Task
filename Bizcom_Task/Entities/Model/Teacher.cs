@@ -12,6 +12,7 @@ namespace Bizcom_Task.Entities.Model
         public string? LastName { get; set; }
         public string? Email { get; set; }
         public string Phone { get; set; }
+        public string Password { get; set; }
         public EUserRole Role { get; set; } = EUserRole.Teacher;
         public ETeacherStatus TeacherStatus { get; set; }
         public DateTime BirthDate { get; set; }

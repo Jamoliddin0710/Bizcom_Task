@@ -21,7 +21,7 @@ namespace Bizcom_Task.Controllers
         => Ok(await statisticsService.GetStudentAgeTo20());
 
         //12-avgustdan 18-sentyabrgacha tugʻilgan barcha oʻquvchilarning maʼlumotlarini koʻrsatish
-        [HttpGet("Student-Mont-August-September")]
+        [HttpGet("Student-Month-August-September")]
         public async Task<IActionResult> GetStudent12AugustToSeptember()
         => Ok(await statisticsService.GetStudentFrom12To18());
 
@@ -57,8 +57,8 @@ namespace Bizcom_Task.Controllers
 
         //9) Talabaning o'rtacha bahosi eng yuqori bo'lgan fanni ko'rsating
         [HttpGet("Get-Subject-By-MaxScore")]
-        public async Task<IActionResult> GetSubjectByMaxScore(int studentId)
-        => Ok(await statisticsService.GetSubjectByStudentMaxBall(studentId));
+        public async Task<IActionResult> GetSubjectByMaxScore()
+        => Ok(await statisticsService.GetSubjectHighestAverageScore());
 
 
     }

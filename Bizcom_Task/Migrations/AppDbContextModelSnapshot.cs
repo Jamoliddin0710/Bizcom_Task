@@ -164,6 +164,10 @@ namespace Bizcom_Task.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -200,40 +204,6 @@ namespace Bizcom_Task.Migrations
                     b.ToTable("TeachersSubjects");
                 });
 
-            modelBuilder.Entity("Bizcom_Task.Entities.Model.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("userId");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("Bizcom_Task.Entities.Model.Grade", b =>
                 {
                     b.HasOne("Bizcom_Task.Entities.Model.Student", "Student")
@@ -243,7 +213,7 @@ namespace Bizcom_Task.Migrations
                         .IsRequired();
 
                     b.HasOne("Bizcom_Task.Entities.Model.Subject", "Subject")
-                        .WithMany()
+                        .WithMany("Grades")
                         .HasForeignKey("subjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -325,6 +295,11 @@ namespace Bizcom_Task.Migrations
                     b.Navigation("StudentSubjects");
 
                     b.Navigation("StudentTeachers");
+                });
+
+            modelBuilder.Entity("Bizcom_Task.Entities.Model.Subject", b =>
+                {
+                    b.Navigation("Grades");
                 });
 
             modelBuilder.Entity("Bizcom_Task.Entities.Model.Teacher", b =>

@@ -1,10 +1,13 @@
 ﻿using Bizcom_Task.Entities.DTO.Grade;
+using Bizcom_Task.Entities.Model.Enum;
 using Bizcom_Task.Service.ServiceContract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bizcom_Task.Controllers
 {
+    [Authorize(Roles = "Teacher")]
     [Route("api/[controller]")]
     [ApiController]
     public class GradesController : ControllerBase
@@ -17,11 +20,11 @@ namespace Bizcom_Task.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddGrade(int teacherId, [FromBody] AddGradeDTO addGrade)
+        public async Task<IActionResult> AddGrade( [FromBody] AddGradeDTO addGrade)
         {
             try
             {
-                await _gradeService.AddGrade(teacherId, addGrade);
+                await _gradeService.AddGrade(User, addGrade);
                 return Ok();
             }
             catch (Exception ex)

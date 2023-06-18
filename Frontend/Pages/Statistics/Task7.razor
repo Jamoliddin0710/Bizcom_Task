@@ -1,0 +1,88 @@
+﻿@page "/task7"
+
+@using Frontend.Entities.ModelView;
+@using Frontend.Service;
+
+@inject StatisticsService statisticsService;
+@code {
+
+
+    List<TeacherDTO> teachers = new List<TeacherDTO>();
+    List<SubjectDTO> subjects = new List<SubjectDTO>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            teachers = await statisticsService.GetAllTeachers();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task GetAuthorData()
+    {
+        await OnInitializedAsync();
+    }
+
+    private async Task GetSubjectByTeacherId(int teacherId)
+    {
+        try
+        {
+            subjects = await statisticsService.GetSubjectByStudentBall10(teacherId);
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        // OnInitializedAsync();
+    }
+}
+
+
+
+    @if (subjects.Count > 0)
+{
+    @for (int i = 0; i < subjects.Count; i += 4)
+    {
+        <div style="display :flex ; flex-wrap :wrap">
+
+            @for (int j = i; j < Math.Min(i + 4, subjects.Count); j++)
+            {
+                var subject = subjects[j];
+                <div style="flex-basis: 25%; padding: 10px; text-align:center">
+
+                    <MudIcon Icon="@Icons.Material.Filled.Book" Style="font-size: 14rem;"></MudIcon>
+                    <MudText>@subject.Name</MudText>
+                </div>
+            }
+        </div>
+    }
+}
+else
+{
+    @if (teachers.Count > 0)
+    {
+        @for (int i = 0; i < teachers.Count; i += 4)
+        {
+            <div class="author-row" style="display :flex ; flex-wrap :wrap">
+                @for (int j = i; j < Math.Min(i + 4, teachers.Count); j++)
+                {
+                    var teacher = teachers[j];
+
+                    <div class="author-column" style="flex-basis: 25%; padding: 10px; text-align:center">
+                        <MudButton OnClick="()=> GetSubjectByTeacherId(teacher.Id)">
+                            <MudIcon onclick="()=> GetBookByAuthotId(teacher.Id)" Icon="@Icons.Material.Filled.AccountCircle" Style="font-size: 14rem;"></MudIcon>
+                        </MudButton>
+                        <MudText>@teacher.FirstName  @teacher.LastName</MudText>
+                    </div>
+                }
+            </div>
+        }
+    }
+}
+    

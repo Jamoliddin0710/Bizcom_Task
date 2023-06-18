@@ -37,6 +37,11 @@ namespace Bizcom_Task.Repository
             return grade;
         }
 
+        public  bool IsThereStudentAndSubject(int studentId, int subjectId)
+        {
+          return (context.Students.Any(st => st.Id == studentId) && context.Students.Any(sub => sub.Id == subjectId));
+        }
+
         public async Task UpdateGrade(Grade grade)
         {
             context.Grades.Update(grade);

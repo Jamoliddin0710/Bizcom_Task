@@ -1,0 +1,79 @@
+﻿@page "/task5"
+@using Frontend.Entities.ModelView;
+@using Frontend.Service;
+@inject StatisticsService statisticsService;
+
+
+<ToolBarContent>
+    <MudTextField @bind-Value="name" Placeholder="Search" Adornment="Adornment.Start" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    <MudButton OnClick="@Search" type="submit">Search</MudButton>
+</ToolBarContent>
+<MudTable Items="@Students">
+    <HeaderContent>
+        <MudTh>#</MudTh>
+        <MudTh>FirstName</MudTh>
+        <MudTh>LastName</MudTh>
+        <MudTh>Email</MudTh>
+        <MudTh>Phone</MudTh>
+        <MudTh>Date</MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd>@context.Id</MudTd>
+        <MudTd>@context.FirstName</MudTd>
+        <MudTd>@context.LastName</MudTd>
+        <MudTd>@context.Email</MudTd>
+        <MudTd>@context.Phone</MudTd>
+        <MudTd>@context.DateOfBirth</MudTd>
+        <MudTd>
+            <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Edit" />
+        </MudTd>
+        <MudTd>
+            <MudFab Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete" />
+        </MudTd>
+    </RowTemplate>
+
+</MudTable>
+
+
+@code {
+    private IEnumerable<StudentDTO> Students = new List<StudentDTO>();
+    string? name;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Students = await statisticsService.GetAllStudent();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task Search()
+    {
+        if (!string.IsNullOrEmpty(name))
+        {
+            try
+            {
+                Students = await statisticsService.GetStudentsByUserName(name);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+        else
+        {
+            try
+            {
+                Students = await statisticsService.GetAllStudent();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+    }
+}

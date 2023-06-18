@@ -1,0 +1,30 @@
+﻿@page "/task9"
+@using Frontend.Entities.ModelView;
+@using Frontend.Service;
+@inject StatisticsService statisticsService
+
+@code {
+  
+    private SubjectDTO subject = new SubjectDTO();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            subject = await  statisticsService.GetSubjectHighestAverageScore();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}
+
+@if (!string.IsNullOrEmpty(subject.Name))
+{
+    <div style="float: left; padding: 10px; text-align: left">
+        <MudIcon Icon="@Icons.Material.Filled.MenuBook" Style="font-size: 14rem;"></MudIcon>
+        <MudText Style="text-align: center">@subject.Name</MudText>
+    </div>
+
+}

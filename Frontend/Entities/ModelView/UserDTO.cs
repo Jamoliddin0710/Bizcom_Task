@@ -1,17 +1,18 @@
-﻿using Bizcom_Task.Entities.Model.Enum;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Bizcom_Task.Entities.Model
+namespace Frontend.Entities.ModelView
 {
-    public class User
+    public class UserDTO
     {
-        [Column("userId")]
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string? LastName { get; set; }
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public EUserRole Role { get; set; }
     }
 }

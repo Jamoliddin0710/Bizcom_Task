@@ -1,0 +1,76 @@
+﻿@page "/task4"
+@using Frontend.Entities.ModelView;
+@using Frontend.Service;
+@inject StatisticsService statisticsService;
+<h3>task3</h3>
+
+@code {
+    Tuple<List<StudentDTO>, List<TeacherDTO>> StudentTeachers = new Tuple<List<StudentDTO>, List<TeacherDTO>>(new List<StudentDTO>(), new List<TeacherDTO>());
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            StudentTeachers = await statisticsService.GetBeelineUser();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}
+@if (StudentTeachers.Item1.Count > 0)
+{
+
+    <MudTable Items="@StudentTeachers.Item1">
+        <HeaderContent>
+            <MudTh>#</MudTh>
+            <MudTh>FirstName</MudTh>
+            <MudTh>LastName</MudTh>
+            <MudTh>Email</MudTh>
+            <MudTh>Phone</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd>@context.Id</MudTd>
+            <MudTd>@context.FirstName</MudTd>
+            <MudTd>@context.LastName</MudTd>
+            <MudTd>@context.Email</MudTd>
+            <MudTd>@context.Phone</MudTd>
+            <MudTd>
+                <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Edit" />
+            </MudTd>
+            <MudTd>
+                <MudFab Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@if (StudentTeachers.Item2.Count > 0)
+{
+    <MudTable Items="@StudentTeachers.Item2">
+        <HeaderContent>
+            <MudTh>#</MudTh>
+            <MudTh>FirstName</MudTh>
+            <MudTh>LastName</MudTh>
+            <MudTh>Email</MudTh>
+            <MudTh>Phone</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd>@context.Id</MudTd>
+            <MudTd>@context.FirstName</MudTd>
+            <MudTd>@context.LastName</MudTd>
+            <MudTd>@context.Email</MudTd>
+            <MudTd>@context.Phone</MudTd>
+            <MudTd>
+                <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Edit" />
+            </MudTd>
+            <MudTd>
+                <MudFab Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
