@@ -2,6 +2,6 @@
 {
     public static class AuthToken
     {
-        public static string? Token { get; set; }
+        public static string? Token { get; set; } = null;
     }
 }
