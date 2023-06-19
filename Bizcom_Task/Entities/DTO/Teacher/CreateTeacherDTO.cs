@@ -5,16 +5,16 @@ namespace Bizcom_Task.Entities.DTO.Teacher
 {
     public class CreateTeacherDTO
     {
-       // [Required]
+        [Required]
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-       // [EmailAddress]
+        [EmailAddress]
         public string? Email { get; set; }
-     //   [DataType(DataType.DateTime)]
-       // public DateTime BirtDate { get; set; }
-       // [Phone]
+        [DataType(DataType.DateTime)]
+        public DateTime BirthDate { get; set; }
+        [Phone]
         public string? Phone { get; set; }
-     //   [Required]
+        [Required]
         public string? Password { get; set; }
     }
 }

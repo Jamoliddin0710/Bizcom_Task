@@ -1,7 +1,10 @@
-﻿@page "/signup"
+﻿@page "/"
 @using Frontend.Entities.DTO.Teacher
+@using Frontend.Entities.ModelView;
+@using Frontend.Static;
 @using Microsoft.AspNetCore.Components.Forms
 @using System.Net.Http.Json
+@using Newtonsoft.Json;
 @inject NavigationManager Navigation
 
 <h3>Register</h3>
@@ -30,16 +33,24 @@
     </div>
 
     <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" class="input-control" @bind-Value="@createTeacher.Email" />
+        <ValidationMessage For="@(() => createTeacher.Email)" class="validation-message" />
+    </div>
+
+    <div class="form-group">
+        <label for="birthdate">Birthdate</label>
+        <InputDate id="birthdate" class="input-control"  @bind-Value="@createTeacher.BirthDate" />
+        <ValidationMessage For="@(() => createTeacher.BirthDate)" class="validation-message" />
+    </div>
+
+    <div class="form-group">
         <label for="password">Password</label>
         <InputText id="password" class="input-control" @bind-Value="@createTeacher.Password" />
         <ValidationMessage For="@(() => createTeacher.Password)" class="validation-message" />
     </div>
 
-    <div class="form-group">
-        <label for="email">Email</label>
-        <InputText id="email" class="input-control" @bind-Value="@createTeacher.Email" />
-        <ValidationMessage For="@(() => createTeacher.Email)" class="validation-message" />
-    </div>
+
 
     <button type="submit" class="btn btn-primary">Register</button>
 </EditForm>
@@ -47,9 +58,11 @@
 
 
 
+
 @code {
     private CreateTeacherDTO createTeacher = new CreateTeacherDTO();
     private bool isRegistrationSuccessful = false;
+    private UserAuthInfo userAuthInfo = new UserAuthInfo();
     string? error;
 
     private async Task HandLeSubmit()
@@ -62,10 +75,13 @@
 
         var httpClient = new HttpClient();
         var response = await httpClient.PostAsJsonAsync("https://localhost:7000/api/Account/register", createTeacher);
-
         if (response.IsSuccessStatusCode)
         {
+            var responseContent = await response.Content.ReadAsStringAsync();
+            userAuthInfo = JsonConvert.DeserializeObject<UserAuthInfo>(responseContent);
+            AuthToken.Token = userAuthInfo.Token;
             isRegistrationSuccessful = true;
+            if(AuthToken.Token is not null)
             Navigation.NavigateTo("/");
         }
         else

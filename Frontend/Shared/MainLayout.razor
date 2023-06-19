@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using Frontend.Static;
+@inherits LayoutComponentBase
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -29,6 +30,7 @@
 
     void DrawerToggle()
     {
+        if(AuthToken.Token is not null)
         _drawerOpen = !_drawerOpen;
     }
 }
