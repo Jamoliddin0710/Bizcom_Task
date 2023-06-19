@@ -28,7 +28,7 @@ namespace Bizcom_Task.Controllers
 
         [ProducesResponseType(typeof(UserAuthInfo), StatusCodes.Status200OK)]
         [HttpPost("register", Name = "Register")]
-        public async Task<ActionResult<UserAuthInfo>> SignUp([FromForm] CreateTeacherDTO createUser)
+        public async Task<ActionResult<UserAuthInfo>> SignUp([FromBody]CreateTeacherDTO createUser)
         {
             var key = Encoding.UTF8.GetBytes(options.Value.SecretKey);
             var userAuth = await teacherService.SignUp(key, createUser);
