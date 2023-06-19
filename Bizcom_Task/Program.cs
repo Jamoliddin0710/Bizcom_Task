@@ -33,8 +33,10 @@ builder.AllowCredentials()
         "https://localhost:5000",
         "https://localhost:5001",
         "https://localhost:44398",
-        "https://localhost:44398"
-        , "https://localhost:44352")));
+        "https://localhost:44398",
+        "https://localhost:44306/Frontend"
+        , "https://localhost:44352"
+        )));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

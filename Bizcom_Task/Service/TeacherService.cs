@@ -105,6 +105,7 @@ namespace Bizcom_Task.Service
 
             var teacher = createUser.Adapt<Teacher>();
             teacher.Role = Entities.Model.Enum.EUserRole.Teacher;
+            teacher.BirthDate = DateTime.Now;
             await teacherRepository.SignUpUser(teacher);
             var userAuth = GenerateToken(key, teacher);
             if (userAuth.UserCredentials is null)
